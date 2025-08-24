@@ -102,6 +102,11 @@ export function createRateLimiter(options?: RateLimiterOptions): RateLimiter {
   }
 
   return {
-    execute: executeWithRateLimit,
+    execute<T>(fn: () => Promise<T>): Promise<T> {
+      const promise = executeWithRateLimit(fn);
+      // NodeのUnhandledRejection警告を抑止（挙動影響なし）
+      promise.catch(() => {});
+      return promise;
+    },
   };
 }

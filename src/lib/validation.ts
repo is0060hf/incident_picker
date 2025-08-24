@@ -95,7 +95,7 @@ export function parseArrayParam(param: string | null): string[] | undefined {
 export function formatValidationErrors(error: z.ZodError): Record<string, string[]> {
   const formatted: Record<string, string[]> = {};
   
-  error.errors.forEach((err) => {
+  error.issues.forEach((err) => {
     const path = err.path.join('.');
     if (!formatted[path]) {
       formatted[path] = [];
