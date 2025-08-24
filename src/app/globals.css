@@ -2,85 +2,200 @@
 @tailwind components;
 @tailwind utilities;
 
-/* アクセシビリティ用スタイル */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+/* WCAG 2.2準拠のベーススタイル */
+@layer base {
+  /* ルート要素の設定 */
+  :root {
+    /* 色のコントラスト比がWCAG AA基準（4.5:1以上）を満たす */
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #4b5563;
+    --color-text-disabled: #9ca3af;
+    --color-background: #ffffff;
+    --color-background-secondary: #f9fafb;
+    --color-background-tertiary: #f3f4f6;
+    --color-primary: #0066cc;
+    --color-primary-hover: #0052a3;
+    --color-primary-focus: #004080;
+    --color-secondary: #6b7280;
+    --color-success: #059669;
+    --color-warning: #d97706;
+    --color-error: #dc2626;
+    --color-border: #e5e7eb;
+    
+    /* フォントサイズ（最小14px推奨） */
+    --text-xs: 0.875rem; /* 14px */
+    --text-sm: 1rem; /* 16px */
+    --text-base: 1.125rem; /* 18px */
+    --text-lg: 1.25rem; /* 20px */
+    --text-xl: 1.5rem; /* 24px */
+    
+    /* 余白の統一 */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+  }
+  
+  /* ベースのタイポグラフィ */
+  html {
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    color: var(--color-text-primary);
+    background-color: var(--color-background);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+  }
+  
+  /* 見出しのスタイル */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.5rem; }
+  h5 { font-size: 1.25rem; }
+  h6 { font-size: 1.125rem; }
+  
+  /* フォーカススタイル（WCAG 2.2 Focus Appearance準拠） */
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  
+  /* リンクのスタイル */
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 150ms ease-in-out;
+  }
+  
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+  
+  a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+    text-decoration: none;
+  }
+  
+  /* ボタンの基本スタイル */
+  button, 
+  input[type="button"], 
+  input[type="submit"] {
+    min-height: 44px; /* タッチターゲットサイズ */
+    min-width: 44px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+  }
+  
+  button:disabled,
+  input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* フォーム要素 */
+  input, 
+  textarea, 
+  select {
+    min-height: 44px;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: var(--text-sm);
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
 }
 
-.not-sr-only {
-  position: static;
-  width: auto;
-  height: auto;
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-  clip: auto;
-  white-space: normal;
-}
-
-/* カスタムプロパティ（CSS変数） */
-:root {
-  /* 色のコントラスト比がWCAG AA基準を満たすよう設定 */
-  --color-text: #1a1a1a;
-  --color-background: #ffffff;
-  --color-primary: #0066cc;
-  --color-primary-hover: #0052a3;
-  --color-secondary: #6b7280;
-  --color-success: #059669;
-  --color-warning: #d97706;
-  --color-error: #dc2626;
-}
-
-/* フォーカス表示の改善 */
-:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-/* リンクのアクセシビリティ */
-a {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-a:hover {
-  color: var(--color-primary-hover);
-}
-
-/* ボタンのアクセシビリティ */
-button:not(:disabled) {
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* アクセシビリティ用ユーティリティクラス */
+@layer utilities {
+  /* スクリーンリーダー専用 */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  .not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+  
+  /* フォーカス可能だがスクリーンリーダー専用 */
+  .sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-primary);
+    z-index: 9999;
+  }
 }
 
 /* 高コントラストモード対応 */
 @media (prefers-contrast: high) {
   :root {
-    --color-text: #000000;
+    --color-text-primary: #000000;
+    --color-text-secondary: #000000;
     --color-background: #ffffff;
     --color-primary: #0052a3;
+    --color-border: #000000;
+  }
+  
+  button, input, textarea, select {
+    border-width: 2px;
   }
 }
 
-/* ダークモード対応（オプション） */
+/* ダークモード対応 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-text: #f3f4f6;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-text-disabled: #6b7280;
     --color-background: #111827;
+    --color-background-secondary: #1f2937;
+    --color-background-tertiary: #374151;
     --color-primary: #60a5fa;
     --color-primary-hover: #93bbfc;
+    --color-primary-focus: #a5c3fd;
+    --color-border: #374151;
   }
 }
 
@@ -93,5 +208,22 @@ button:disabled {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* 印刷対応 */
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  button,
+  .no-print {
+    display: none;
   }
 }

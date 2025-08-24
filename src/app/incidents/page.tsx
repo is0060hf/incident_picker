@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api/client';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
+import IncidentStatusBadge from '@/components/IncidentStatusBadge';
+import IncidentTypeBadge from '@/components/IncidentTypeBadge';
+import PriorityBadge from '@/components/PriorityBadge';
 
 interface Incident {
   id: string;
@@ -216,40 +219,16 @@ export default function IncidentsPage() {
               >
                 <td className="p-4">{incident.title}</td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    incident.urgency === 'high' ? 'bg-red-100 text-red-700' :
-                    incident.urgency === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {urgencyLabels[incident.urgency]}
-                  </span>
+                  <PriorityBadge level={incident.urgency} type="urgency" />
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    incident.impact === 'high' ? 'bg-red-100 text-red-700' :
-                    incident.impact === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {urgencyLabels[incident.impact]}
-                  </span>
+                  <PriorityBadge level={incident.impact} type="impact" />
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    incident.type === '障害' ? 'bg-red-100 text-red-700' :
-                    'bg-orange-100 text-orange-700'
-                  }`}>
-                    {incident.type}
-                  </span>
+                  <IncidentTypeBadge type={incident.type} />
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded text-sm ${
-                    incident.status === 'open' ? 'bg-blue-100 text-blue-700' :
-                    incident.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
-                    incident.status === 'resolved' ? 'bg-green-100 text-green-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {statusLabels[incident.status]}
-                  </span>
+                  <IncidentStatusBadge status={incident.status} />
                 </td>
                 <td className="p-4">
                   {incident.createdAt ? format(new Date(incident.createdAt), 'yyyy/MM/dd HH:mm', { locale: ja }) : '-'}

@@ -6,23 +6,30 @@ interface Props {
 const levelConfig = {
   high: {
     label: '高',
-    className: 'bg-red-100 text-red-700',
+    className: 'bg-error/10 text-error-dark border border-error-dark/20',
+    ariaLabel: '優先度：高',
   },
   medium: {
     label: '中',
-    className: 'bg-yellow-100 text-yellow-700',
+    className: 'bg-warning/10 text-warning-dark border border-warning-dark/20',
+    ariaLabel: '優先度：中',
   },
   low: {
     label: '低',
-    className: 'bg-gray-100 text-gray-700',
+    className: 'bg-gray-100 text-gray-700 border border-gray-300',
+    ariaLabel: '優先度：低',
   },
 };
 
-export default function PriorityBadge({ level }: Props) {
+export default function PriorityBadge({ level, type = 'urgency' }: Props) {
   const config = levelConfig[level];
+  const typeLabel = type === 'urgency' ? '緊急度' : '影響度';
   
   return (
-    <span className={`px-2 py-1 rounded text-sm ${config.className}`}>
+    <span 
+      className={`inline-flex items-center px-2.5 py-1 rounded-md text-sm font-medium ${config.className}`}
+      aria-label={`${typeLabel}：${config.label}`}
+    >
       {config.label}
     </span>
   );

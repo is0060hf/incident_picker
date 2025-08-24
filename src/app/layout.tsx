@@ -10,26 +10,42 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body>
+      <body className="min-h-screen bg-background text-text-primary">
         {/* スクリーンリーダー用スキップリンク */}
-        <a href="#main-content" className="sr-only focus:not-sr-only">
+        <a 
+          href="#main-content" 
+          className="sr-only-focusable absolute top-4 left-4 z-50 bg-white px-4 py-2 text-primary font-medium rounded-md shadow-lg"
+        >
           メインコンテンツへスキップ
         </a>
         
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen flex flex-col">
           {/* ヘッダーとナビゲーション */}
-          <header className="bg-white shadow-sm border-b">
-            <div className="container mx-auto px-4 py-4">
-              <h1 className="text-2xl font-bold">インシデント管理システム</h1>
+          <header className="bg-white shadow-sm border-b border-border" role="banner">
+            <div className="container mx-auto px-4 py-6">
+              <h1 className="text-3xl font-bold text-text-primary">
+                インシデント管理システム
+              </h1>
             </div>
           </header>
           
           <Navigation />
           
           {/* メインコンテンツ */}
-          <main id="main-content" className="container mx-auto px-4 py-8">
+          <main 
+            id="main-content" 
+            className="flex-1 container mx-auto px-4 py-8 focus-visible:outline-none"
+            tabIndex={-1}
+          >
             {children}
           </main>
+          
+          {/* フッター */}
+          <footer className="bg-background-secondary border-t border-border mt-auto" role="contentinfo">
+            <div className="container mx-auto px-4 py-4 text-sm text-text-secondary">
+              © 2024 インシデント管理システム - WCAG 2.2準拠
+            </div>
+          </footer>
         </div>
       </body>
     </html>
