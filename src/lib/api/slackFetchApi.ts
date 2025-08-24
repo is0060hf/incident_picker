@@ -41,6 +41,7 @@ export function createSlackFetchApi(
           slackTs: message.ts,
           raw: message as any,
           postedAt: timestampToDate(message.ts),
+          fetchedAt: new Date(),
         },
       });
       return true;
