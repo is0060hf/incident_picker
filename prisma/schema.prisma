@@ -1,0 +1,129 @@
+// Prisma schema (Neon/PostgreSQL)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String      @id @default(uuid())
+  email          String      @unique
+  hashedPassword String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  auditLogs      AuditLog[]
+}
+
+model Channel {
+  id             String   @id @default(uuid())
+  slackChannelId String   @unique
+  name           String
+  enabled        Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  messages       SlackMessage[]
+  incidents      Incident[]
+  fetchHistories FetchHistory[]
+}
+
+model SlackMessage {
+  id        String   @id @default(uuid())
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  channelId String
+  slackTs   String
+  raw       Json
+  postedAt  DateTime
+  fetchedAt DateTime @default(now())
+  incidents Incident[]
+
+  @@unique([channelId, slackTs])
+}
+
+model Incident {
+  id            String             @id @default(uuid())
+  channel       Channel            @relation(fields: [channelId], references: [id])
+  channelId     String
+  message       SlackMessage       @relation(fields: [messageId], references: [id])
+  messageId     String
+  urgency       String?            // high, medium, low
+  impact        String?            // high, medium, low
+  urgencyManual Boolean            @default(false)
+  impactManual  Boolean            @default(false)
+  type          String?            // 障害, 不具合
+  status        String             @default("open") // open, in_progress, resolved, closed
+  title         String
+  description   String?
+  assignee      String?
+  notes         String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  history       IncidentHistory[]
+}
+
+model FetchHistory {
+  id           String   @id @default(uuid())
+  channel      Channel  @relation(fields: [channelId], references: [id])
+  channelId    String
+  rangeFrom    DateTime
+  rangeTo      DateTime
+  fetchedCount Int
+  apiCalls     Int
+  status       String
+  errorMessage String?
+  createdAt    DateTime @default(now())
+}
+
+model UrgencyRule {
+  id        String   @id @default(uuid())
+  name      String
+  pattern   String
+  value     String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ImpactRule {
+  id        String   @id @default(uuid())
+  name      String
+  pattern   String
+  value     String
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model IncidentHistory {
+  id         String   @id @default(uuid())
+  incident   Incident @relation(fields: [incidentId], references: [id])
+  incidentId String
+  field      String
+  oldValue   String?
+  newValue   String?
+  changedBy  String
+  changedAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String   // UPDATE_INCIDENT, CREATE_RULE, DELETE_CHANNEL, etc.
+  targetType String   // incident, rule, channel, etc.
+  targetId   String
+  changes    Json?    // JSON object with field changes
+  metadata   Json?    // Additional context
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  
+  @@index([userId])
+  @@index([targetType, targetId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+

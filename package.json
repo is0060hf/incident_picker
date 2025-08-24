@@ -1,0 +1,49 @@
+{
+  "name": "incident_picker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node prisma/seed.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.19.0",
+    "@types/lodash": "^4.17.20",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "lodash": "^4.17.21",
+    "next": "^14.2.5",
+    "next-auth": "^4.24.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jest-axe": "^3.5.9",
+    "@types/node": "^22.5.4",
+    "@vitejs/plugin-react": "^5.0.1",
+    "@vitest/coverage-v8": "^2.1.9",
+    "autoprefixer": "^10.4.21",
+    "jest-axe": "^10.0.0",
+    "jsdom": "^26.1.0",
+    "postcss": "^8.5.6",
+    "prisma": "^5.19.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.5.4",
+    "vitest": "^2.1.1",
+    "vitest-mock-extended": "^2.0.1"
+  }
+}

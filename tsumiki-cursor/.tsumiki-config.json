@@ -1,0 +1,13 @@
+{
+  "project": {
+    "name": "incident_picker",
+    "version": "1.0.0",
+    "framework": "tsumiki-cursor"
+  },
+  "settings": {
+    "language": "ja",
+    "testFramework": "jest",
+    "linter": "eslint",
+    "formatter": "prettier"
+  }
+}
